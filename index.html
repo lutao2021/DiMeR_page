@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="Disentangled Mesh Reconstruction Model for 3D reconstruction.">
+  <meta name="keywords" content="DiMeR, Mesh Reconstruction, 3D">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DiMeR: Disentangled Mesh Reconstruction Model</title>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'G-PYVRSFMDRL');
+  </script>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="./static/images/favicon.svg">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+  <!-- Three.js for 3D mesh rendering -->
+  <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/controls/OrbitControls.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/loaders/PLYLoader.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/loaders/MTLLoader.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/loaders/OBJLoader.js"></script>
+</head>
+<body>
+
+<nav class="navbar" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </a>
+  </div>
+  <div class="navbar-menu">
+    <div class="navbar-start" style="flex-grow: 1; justify-content: center;">
+      <a class="navbar-item" href="https://envision-research.hkust-gz.edu.cn/">
+        <span class="icon">
+          <i class="fas fa-home"></i>
+        </span>
+        <span>Envision Lab</span>
+      </a>
+    </div>
+  </div>
+</nav>
+
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title"><span style="color: #AE2142;">DiMeR</span>: <span style="color: #AE2142;">Di</span>sentangled <span style="color: #AE2142;">Me</span>sh <span style="color: #AE2142;">R</span>econstruction Model</h1>
+          <!-- <h4 class="subtitle publication-title">Arxiv 2025</h4> -->
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <a href="#">Lutao Jiang</a><sup>1*</sup>,</span>
+            <span class="author-block">
+              <a href="#">Jiantao Lin</a><sup>1*</sup>,</span>
+            <span class="author-block">
+              <a href="#">Kanghao Chen</a><sup>1*</sup>,</span>
+            <span class="author-block">
+              <a href="#">Wenhang Ge</a><sup>1*</sup>,</span>
+            <br>
+            <span class="author-block">
+              <a href="#">Xin Yang</a><sup>1,2</sup>,</span>
+            <span class="author-block">
+              <a href="#">Yifan Jiang</a><sup>1</sup>,</span>
+            <span class="author-block">
+              <a href="#">Yuanhuiyi Lyu</a><sup>1</sup>,</span>
+            <span class="author-block">
+              <a href="#">Xu Zheng</a><sup>1</sup>,</span>
+            <span class="author-block">
+              <a href="#">Yingcong Chen</a><sup>1,2†</sup></span>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><sup>1</sup>HKUST(GZ),</span>
+            <span class="author-block"><sup>2</sup>HKUST</span>
+          </div>
+          
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><sup>*</sup>Equal Contribution,</span>
+            <span class="author-block"><sup>†</sup>Corresponding Author</span>
+          </div>
+          
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">ljiang553@connect.hkust-gz.edu.cn,</span>
+            <span class="author-block">yingcongchen@ust.hk</span>
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- PDF Link. -->
+              <span class="link-block">
+                <a href="#"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="#"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+              <!-- Code Link. -->
+              <span class="link-block">
+                <a href="https://github.com/lutao2021/DiMeR"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code (coming soon)</span>
+                  </a>
+              </span>
+              <!-- Demo Link. -->
+              <span class="link-block">
+                <a href="#"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-hubspot"></i>
+                  </span>
+                  <span>Demo (coming soon)</span>
+                  </a>
+              </span>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+      <div class="columns is-centered">
+        <div class="column is-10">
+          <div class="publication-teaser">
+            <img src="./static/images/teaser.png" alt="DiMeR teaser figure">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            With the advent of large-scale 3D datasets, feed-forward 3D generative models, such as the Large Reconstruction Model (LRM), have gained significant attention and achieved remarkable success.
+            However, we observe that RGB images often lead to conflicting training objectives and lack the necessary clarity for geometry reconstruction.
+          </p>
+          <p>
+            In this paper, we revisit the inductive biases associated with mesh reconstruction and introduce DiMeR, a novel disentangled dual-stream feed-forward model for sparse-view mesh reconstruction.
+            The key idea is to disentangle both the input and framework into geometry and texture parts, thereby reducing the training difficulty for each part according to the Principle of Occam's Razor.
+            <strong>Given that normal maps are strictly consistent with geometry and accurately capture surface variations, we utilize normal maps as exclusive input for the geometry branch to reduce the complexity between the network's input and output.</strong>
+            Moreover, we improve the mesh extraction algorithm to introduce 3D ground truth supervision.
+          </p>
+          <p>
+            As for texture branch, we use RGB images as input to obtain the textured mesh.
+            Overall, DiMeR demonstrates robust capabilities across various tasks, including sparse-view reconstruction, single-image-to-3D, and text-to-3D. Numerous experiments show that DiMeR significantly outperforms previous methods, achieving over <strong>30%</strong> improvement in Chamfer Distance on the GSO and OmniObject3D dataset.
+          </p>
+        </div>
+      </div>
+    </div>
+    <!--/ Abstract. -->
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- Method. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Method</h2>
+        
+        <div class="content has-text-centered">
+          <img src="./static/images/framework.png" alt="DiMeR Framework" class="framework-image">
+        </div>
+        
+        <div class="content has-text-justified">
+          <p>
+            The core idea of DiMeR is to identify the necessary inductive biases for different stages of 3D mesh reconstruction. Specifically, geometry reconstruction does not require texture information, as RGB textures often introduce ambiguities in important geometric cues. Leveraging the inductive bias that normal maps are inherently consistent with realistic geometry, we focus on <strong>learning the geometry reconstruction solely from normal maps</strong>.
+          </p>
+        </div>
+      </div>
+    </div>
+    <!--/ Method. -->
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- 3D Model Viewer -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Application</h2>
+        
+        <div class="content has-text-centered">
+          <p>Interactive 3D model viewer - you can use the mouse to drag and drop to rotate, the scroll wheel to zoom in and out, and the Shift key to pan.</p>
+          
+          <h3 class="subtitle is-4">Text-to-3D</h3>
+          
+          <!-- 3x2网格布局 -->
+          <div class="mesh-grid">
+            <!-- 第一行 -->
+            <div class="mesh-row">
+              <!-- 模型1 -->
+              <div class="mesh-container">
+                <div id="mesh-viewer-1" class="mesh-viewer"></div>
+                <p class="mesh-caption">A battle mech in a mix of red, blue, and black color, with a cannon on the head.</p>
+              </div>
+              
+              <!-- 模型2 -->
+              <div class="mesh-container">
+                <div id="mesh-viewer-2" class="mesh-viewer"></div>
+                <p class="mesh-caption">Detailed facial sculpt, horned head, tapered horns, deep set eyes, prominent cheekbones, furrowed brow.</p>
+              </div>
+              
+              <!-- 模型3 -->
+              <div class="mesh-container">
+                <div id="mesh-viewer-3" class="mesh-viewer"></div>
+                <p class="mesh-caption">Pink teapot model symmetrical, curved spout, rounded body, flat base, circular lid, elongated handle, tapered top.</p>
+              </div>
+            </div>
+            
+            <!-- 第二行 -->
+            <div class="mesh-row">
+              <!-- 模型4 -->
+              <div class="mesh-container">
+                <div id="mesh-viewer-4" class="mesh-viewer"></div>
+                <p class="mesh-caption">Charlie Brown, a cartoon character in a yellow and black outfit, upright posture.</p>
+              </div>
+              
+              <!-- 模型5 -->
+              <div class="mesh-container">
+                <div id="mesh-viewer-5" class="mesh-viewer"></div>
+                <p class="mesh-caption">A person wearing a virtual reality headset, sitting position, bent legs, clasped hands.</p>
+              </div>
+              
+              <!-- 模型6 -->
+              <div class="mesh-container">
+                <div id="mesh-viewer-6" class="mesh-viewer"></div>
+                <p class="mesh-caption">A pink frog wearing a green hat and bow tie, humanoid shape, bulbous hat.</p>
+              </div>
+            </div>
+          </div>
+          
+        </div>
+          
+          <h3 class="subtitle is-4">Image-to-3D</h3>
+          
+          <!-- 4x2网格布局 -->
+          <div class="mesh-grid">
+            <!-- 第一行 -->
+            <div class="mesh-row">
+              <!-- 图片1 -->
+              <div class="mesh-container image-mesh-pair">
+                <div class="image-container">
+                  <img src="./static/images/1.png" alt="Input image 1" class="input-image">
+                </div>
+              </div>
+              
+              <!-- 模型1 -->
+              <div class="mesh-container image-mesh-pair">
+                <div id="mesh-viewer-7" class="mesh-viewer"></div>
+                <p class="mesh-caption">3D reconstruction from the input image</p>
+              </div>
+              
+              <!-- 图片2 -->
+              <div class="mesh-container image-mesh-pair">
+                <div class="image-container">
+                  <img src="./static/images/2.png" alt="Input image 2" class="input-image">
+                </div>
+              </div>
+              
+              <!-- 模型2 -->
+              <div class="mesh-container image-mesh-pair">
+                <div id="mesh-viewer-8" class="mesh-viewer"></div>
+                <p class="mesh-caption">3D reconstruction from the input image</p>
+              </div>
+            </div>
+            
+            <!-- 第二行 -->
+            <div class="mesh-row">
+              <!-- 图片3 -->
+              <div class="mesh-container image-mesh-pair">
+                <div class="image-container">
+                  <img src="./static/images/3.png" alt="Input image 3" class="input-image">
+                </div>
+              </div>
+              
+              <!-- 模型3 -->
+              <div class="mesh-container image-mesh-pair">
+                <div id="mesh-viewer-9" class="mesh-viewer"></div>
+                <p class="mesh-caption">3D reconstruction from the input image</p>
+              </div>
+              
+              <!-- 图片4 -->
+              <div class="mesh-container image-mesh-pair">
+                <div class="image-container">
+                  <img src="./static/images/4.png" alt="Input image 4" class="input-image">
+                </div>
+              </div>
+              
+              <!-- 模型4 -->
+              <div class="mesh-container image-mesh-pair">
+                <div id="mesh-viewer-10" class="mesh-viewer"></div>
+                <p class="mesh-caption">3D reconstruction from the input image</p>
+              </div>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+    <!-- /3D Model Viewer -->
+  </div>
+</section>
+
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+    <pre><code></code></pre>
+  </div>
+</section>
+
+
+<footer class="footer">
+  <div class="container">
+    <div class="content has-text-centered">
+      <a class="icon-link"
+         href="./static/videos/nerfies_paper.pdf">
+        <i class="fas fa-file-pdf"></i>
+      </a>
+      <a class="icon-link" href="https://github.com/keunhong" class="external-link" disabled>
+        <i class="fab fa-github"></i>
+      </a>
+    </div>
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p>
+            This website is licensed under a <a rel="license"
+                                                href="http://creativecommons.org/licenses/by-sa/4.0/">Creative
+            Commons Attribution-ShareAlike 4.0 International License</a>.
+          </p>
+          <p>
+            This means you are free to borrow the <a
+              href="https://github.com/nerfies/nerfies.github.io">source code</a> of this website,
+            we just ask that you link back to this page in the footer.
+            Please remember to remove the analytics code included in the header of the website which
+            you do not want on your website.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // 当DOM完全加载后初始化3D模型查看器
+  document.addEventListener('DOMContentLoaded', function() {
+    // 所有查看器使用同一个模型文件
+    initMeshViewer('mesh-viewer-1', './static/meshes/Battle_Mech.ply');
+    initMeshViewer('mesh-viewer-2', './static/meshes/sculpt.ply');
+    initMeshViewer('mesh-viewer-3', './static/meshes/teapot.ply');
+    initMeshViewer('mesh-viewer-4', './static/meshes/Charlie_Brown.ply');
+    initMeshViewer('mesh-viewer-5', './static/meshes/man_VR.ply');
+    initMeshViewer('mesh-viewer-6', './static/meshes/hat_frog.ply');
+    initMeshViewer('mesh-viewer-7', './static/meshes/3M_Vinyl_Tape_Green_1_x_36_yd.ply');
+    initMeshViewer('mesh-viewer-8', './static/meshes/Progressive_Rubber_Spatulas_3_count.ply');
+    initMeshViewer('mesh-viewer-9', './static/meshes/Pinwheel_Pencil_Case.ply');
+    initMeshViewer('mesh-viewer-10', './static/meshes/3D_Dollhouse_Refrigerator.ply');
+    
+  });
+
+  // 初始化3D模型查看器的函数
+  function initMeshViewer(containerId, meshPath) {
+    // 获取容器尺寸
+    const container = document.getElementById(containerId);
+    const width = container.clientWidth;
+    const height = container.clientHeight;
+    
+    // 创建状态显示元素
+    const statusElement = document.createElement('div');
+    statusElement.style.position = 'absolute';
+    statusElement.style.top = '50%';
+    statusElement.style.left = '50%';
+    statusElement.style.transform = 'translate(-50%, -50%)';
+    statusElement.style.color = '#333';
+    statusElement.style.fontSize = '14px';
+    statusElement.textContent = '加载模型中...';
+    container.style.position = 'relative';
+    container.appendChild(statusElement);
+    
+    // 创建场景、相机和渲染器
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0xf0f0f0); // 调暗背景色
+    
+    const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
+    camera.position.z = 2;
+    
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(width, height);
+    container.appendChild(renderer.domElement);
+    
+    // 添加轨道控制器，实现拖拽、缩放功能
+    const controls = new THREE.OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.25;
+    controls.enableZoom = true;
+    
+    // 添加光照 - 调暗光照强度
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5); // 调暗环境光
+    scene.add(ambientLight);
+    
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.7); // 调暗直射光
+    directionalLight.position.set(1, 1, 1);
+    scene.add(directionalLight);
+    
+    const directionalLight2 = new THREE.DirectionalLight(0xffffff, 0.4); // 调暗辅助光源
+    directionalLight2.position.set(-1, -1, -1);
+    scene.add(directionalLight2);
+    
+    // 加载PLY模型
+    const loader = new THREE.PLYLoader();
+    loader.load(meshPath, function(geometry) {
+      // 居中几何体
+      geometry.computeBoundingBox();
+      const center = geometry.boundingBox.getCenter(new THREE.Vector3());
+      geometry.translate(-center.x, -center.y, -center.z);
+      
+      // 缩放几何体以适应视口
+      const size = geometry.boundingBox.getSize(new THREE.Vector3());
+      const maxDim = Math.max(size.x, size.y, size.z);
+      const scale = 1.5 / maxDim;
+      geometry.scale(scale, scale, scale);
+      
+      // 计算顶点法线，确保光照计算正确
+      geometry.computeVertexNormals();
+      
+      // 使用调暗的材质
+      const material = new THREE.MeshPhongMaterial({
+        color: 0x999999, // 调暗物体颜色为深灰色
+        specular: 0x111111,
+        shininess: 15, // 降低光泽度
+        flatShading: false
+      });
+      
+      const mesh = new THREE.Mesh(geometry, material);
+      scene.add(mesh);
+      
+      // 修改初始旋转，纠正模型上下颠倒的问题
+      mesh.rotation.x = Math.PI / 2; // 从 -Math.PI/4 修改为 Math.PI/4 来翻转模型
+      mesh.rotation.z = Math.PI * 2 / 9; // 旋转模型以适应视角
+      mesh.rotation.z = Math.PI / 2; // 旋转模型以适应视角
+
+      // 移除状态显示
+      statusElement.style.opacity = '0';
+      setTimeout(() => statusElement.remove(), 1000);
+    }, 
+    // 进度回调
+    function(xhr) {
+      if (xhr.lengthComputable) {
+        statusElement.textContent = `加载中: ${Math.floor(xhr.loaded / xhr.total * 100)}%`;
+      }
+    },
+    // 错误回调
+    function(error) {
+      console.error('加载PLY文件失败:', error);
+      statusElement.textContent = '无法加载3D模型';
+      
+      // 在加载失败时创建一个简单的立方体
+      const geometry = new THREE.BoxGeometry(1, 1, 1);
+      const material = new THREE.MeshStandardMaterial({ color: 0x666666 }); // 调暗备用模型颜色
+      const cube = new THREE.Mesh(geometry, material);
+      scene.add(cube);
+    });
+    
+    // 动画循环
+    function animate() {
+      requestAnimationFrame(animate);
+      controls.update();
+      renderer.render(scene, camera);
+    }
+    
+    animate();
+    
+    // 处理窗口大小调整
+    window.addEventListener('resize', function() {
+      const newWidth = container.clientWidth;
+      const newHeight = container.clientHeight;
+      
+      camera.aspect = newWidth / newHeight;
+      camera.updateProjectionMatrix();
+      
+      renderer.setSize(newWidth, newHeight);
+    });
+  }
+
+  // 初始化OBJ模型查看器的函数
+  function initObjViewer(containerId, objPath, mtlPath) {
+    // 获取容器尺寸
+    const container = document.getElementById(containerId);
+    const width = container.clientWidth;
+    const height = container.clientHeight;
+    
+    // 创建状态显示元素
+    const statusElement = document.createElement('div');
+    statusElement.style.position = 'absolute';
+    statusElement.style.top = '50%';
+    statusElement.style.left = '50%';
+    statusElement.style.transform = 'translate(-50%, -50%)';
+    statusElement.style.color = '#333';
+    statusElement.style.fontSize = '14px';
+    statusElement.textContent = '加载模型中...';
+    container.style.position = 'relative';
+    container.appendChild(statusElement);
+    
+    // 创建场景、相机和渲染器
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0xf0f0f0); // 调暗背景色
+    
+    const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
+    camera.position.z = 1.3; // 将相机位置从2改为1.2，使模型显示更近
+    
+    // 改进渲染器设置，禁用透明度
+    const renderer = new THREE.WebGLRenderer({ 
+      antialias: true,
+      alpha: false 
+    });
+    renderer.setSize(width, height);
+    container.appendChild(renderer.domElement);
+    
+    // 添加轨道控制器，实现拖拽、缩放功能
+    const controls = new THREE.OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.25;
+    controls.enableZoom = true;
+    
+    // 增强光照
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.7); // 增加环境光亮度
+    scene.add(ambientLight);
+    
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.9); // 增加直射光亮度
+    directionalLight.position.set(1, 1, 1);
+    scene.add(directionalLight);
+    
+    const directionalLight2 = new THREE.DirectionalLight(0xffffff, 0.6); // 增加辅助光亮度
+    directionalLight2.position.set(-1, -1, -1);
+    scene.add(directionalLight2);
+    
+    // 加载OBJ模型
+    const mtlLoader = new THREE.MTLLoader();
+    mtlLoader.setPath(mtlPath.substring(0, mtlPath.lastIndexOf('/') + 1)); // 设置正确的材质路径
+    mtlLoader.load(mtlPath.split('/').pop(), function(materials) {
+      materials.preload();
+      
+      const objLoader = new THREE.OBJLoader();
+      objLoader.setMaterials(materials);
+      objLoader.setPath(objPath.substring(0, objPath.lastIndexOf('/') + 1)); // 设置正确的模型路径
+      objLoader.load(objPath.split('/').pop(), function(object) {
+        // 遍历对象的所有材质并确保不透明
+        object.traverse(function(child) {
+          if (child instanceof THREE.Mesh) {
+            if (child.material) {
+              if (Array.isArray(child.material)) {
+                child.material.forEach(mat => {
+                  mat.transparent = false;
+                  mat.opacity = 1.0;
+                  mat.side = THREE.DoubleSide; // 渲染双面
+                });
+              } else {
+                child.material.transparent = false;
+                child.material.opacity = 1.0;
+                child.material.side = THREE.DoubleSide; // 渲染双面
+              }
+            }
+          }
+        });
+        
+        // 居中几何体
+        const box = new THREE.Box3().setFromObject(object);
+        const center = box.getCenter(new THREE.Vector3());
+        object.position.sub(center);
+        
+        // 缩放几何体以适应视口
+        const size = box.getSize(new THREE.Vector3());
+        const maxDim = Math.max(size.x, size.y, size.z);
+        const scale = 1.5 / maxDim;
+        object.scale.set(scale, scale, scale);
+        
+        // 调整模型旋转以便更好地显示
+        object.rotation.x = -Math.PI / 6;
+        object.rotation.y = Math.PI / 4;
+        
+        scene.add(object);
+        
+        // 移除状态显示
+        statusElement.style.opacity = '0';
+        setTimeout(() => statusElement.remove(), 1000);
+      }, 
+      // 进度回调
+      function(xhr) {
+        if (xhr.lengthComputable) {
+          statusElement.textContent = `加载中: ${Math.floor(xhr.loaded / xhr.total * 100)}%`;
+        }
+      },
+      // 错误回调
+      function(error) {
+        console.error('加载OBJ文件失败:', error);
+        statusElement.textContent = '无法加载3D模型';
+        
+        // 在加载失败时创建一个简单的立方体
+        const geometry = new THREE.BoxGeometry(1, 1, 1);
+        const material = new THREE.MeshStandardMaterial({ 
+          color: 0x666666,
+          transparent: false 
+        });
+        const cube = new THREE.Mesh(geometry, material);
+        scene.add(cube);
+      });
+    },
+    undefined,
+    function(error) {
+      console.error('加载MTL文件失败:', error);
+      
+      // MTL加载失败时，尝试不使用材质直接加载OBJ
+      const objLoader = new THREE.OBJLoader();
+      objLoader.load(objPath, function(object) {
+        // 使用默认材质
+        object.traverse(function(child) {
+          if (child instanceof THREE.Mesh) {
+            child.material = new THREE.MeshPhongMaterial({
+              color: 0x999999,
+              specular: 0x111111,
+              shininess: 15,
+              transparent: false,
+              side: THREE.DoubleSide
+            });
+          }
+        });
+        
+        // 居中几何体
+        const box = new THREE.Box3().setFromObject(object);
+        const center = box.getCenter(new THREE.Vector3());
+        object.position.sub(center);
+        
+        // 缩放几何体以适应视口
+        const size = box.getSize(new THREE.Vector3());
+        const maxDim = Math.max(size.x, size.y, size.z);
+        const scale = 1.5 / maxDim;
+        object.scale.set(scale, scale, scale);
+        
+        scene.add(object);
+        
+        // 移除状态显示
+        statusElement.style.opacity = '0';
+        setTimeout(() => statusElement.remove(), 1000);
+      });
+    });
+    
+    // 动画循环
+    function animate() {
+      requestAnimationFrame(animate);
+      controls.update();
+      renderer.render(scene, camera);
+    }
+    
+    animate();
+    
+    // 处理窗口大小调整
+    window.addEventListener('resize', function() {
+      const newWidth = container.clientWidth;
+      const newHeight = container.clientHeight;
+      
+      camera.aspect = newWidth / newHeight;
+      camera.updateProjectionMatrix();
+      
+      renderer.setSize(newWidth, newHeight);
+    });
+  }
+</script>
+
+</body>
+</html>
