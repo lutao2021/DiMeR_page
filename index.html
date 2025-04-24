@@ -239,44 +239,44 @@
           
           <h3 class="subtitle is-4">Text-to-3D</h3>
           
-          <!-- 3x2网格布局 -->
+          <!-- 3x2 Grid Layout -->
           <div class="mesh-grid">
-            <!-- 第一行 -->
+            <!-- First Row -->
             <div class="mesh-row">
-              <!-- 模型1 -->
+              <!-- Model 1 -->
               <div class="mesh-container">
                 <div id="mesh-viewer-1" class="mesh-viewer"></div>
                 <p class="mesh-caption">A battle mech in a mix of red, blue, and black color, with a cannon on the head.</p>
               </div>
               
-              <!-- 模型2 -->
+              <!-- Model 2 -->
               <div class="mesh-container">
                 <div id="mesh-viewer-2" class="mesh-viewer"></div>
                 <p class="mesh-caption">Detailed facial sculpt, horned head, tapered horns, deep set eyes, prominent cheekbones, furrowed brow.</p>
               </div>
               
-              <!-- 模型3 -->
+              <!-- Model 3 -->
               <div class="mesh-container">
                 <div id="mesh-viewer-3" class="mesh-viewer"></div>
                 <p class="mesh-caption">Pink teapot model symmetrical, curved spout, rounded body, flat base, circular lid, elongated handle, tapered top.</p>
               </div>
             </div>
             
-            <!-- 第二行 -->
+            <!-- Second Row -->
             <div class="mesh-row">
-              <!-- 模型4 -->
+              <!-- Model 4 -->
               <div class="mesh-container">
                 <div id="mesh-viewer-4" class="mesh-viewer"></div>
                 <p class="mesh-caption">Charlie Brown, a cartoon character in a yellow and black outfit, upright posture.</p>
               </div>
               
-              <!-- 模型5 -->
+              <!-- Model 5 -->
               <div class="mesh-container">
                 <div id="mesh-viewer-5" class="mesh-viewer"></div>
                 <p class="mesh-caption">A person wearing a virtual reality headset, sitting position, bent legs, clasped hands.</p>
               </div>
               
-              <!-- 模型6 -->
+              <!-- Model 6 -->
               <div class="mesh-container">
                 <div id="mesh-viewer-6" class="mesh-viewer"></div>
                 <p class="mesh-caption">A pink frog wearing a green hat and bow tie, humanoid shape, bulbous hat.</p>
@@ -288,60 +288,60 @@
           
           <h3 class="subtitle is-4">Image-to-3D</h3>
           
-          <!-- 4x2网格布局 -->
+          <!-- 4x2 Grid Layout -->
           <div class="mesh-grid">
-            <!-- 第一行 -->
+            <!-- First Row -->
             <div class="mesh-row">
-              <!-- 图片1 -->
+              <!-- Image 1 -->
               <div class="mesh-container image-mesh-pair">
                 <div class="image-container">
                   <img src="./static/images/1.png" alt="Input image 1" class="input-image">
                 </div>
               </div>
               
-              <!-- 模型1 -->
+              <!-- Model 1 -->
               <div class="mesh-container image-mesh-pair">
                 <div id="mesh-viewer-7" class="mesh-viewer"></div>
                 <p class="mesh-caption">3D reconstruction from the input image</p>
               </div>
               
-              <!-- 图片2 -->
+              <!-- Image 2 -->
               <div class="mesh-container image-mesh-pair">
                 <div class="image-container">
                   <img src="./static/images/2.png" alt="Input image 2" class="input-image">
                 </div>
               </div>
               
-              <!-- 模型2 -->
+              <!-- Model 2 -->
               <div class="mesh-container image-mesh-pair">
                 <div id="mesh-viewer-8" class="mesh-viewer"></div>
                 <p class="mesh-caption">3D reconstruction from the input image</p>
               </div>
             </div>
             
-            <!-- 第二行 -->
+            <!-- Second Row -->
             <div class="mesh-row">
-              <!-- 图片3 -->
+              <!-- Image 3 -->
               <div class="mesh-container image-mesh-pair">
                 <div class="image-container">
                   <img src="./static/images/3.png" alt="Input image 3" class="input-image">
                 </div>
               </div>
               
-              <!-- 模型3 -->
+              <!-- Model 3 -->
               <div class="mesh-container image-mesh-pair">
                 <div id="mesh-viewer-9" class="mesh-viewer"></div>
                 <p class="mesh-caption">3D reconstruction from the input image</p>
               </div>
               
-              <!-- 图片4 -->
+              <!-- Image 4 -->
               <div class="mesh-container image-mesh-pair">
                 <div class="image-container">
                   <img src="./static/images/4.png" alt="Input image 4" class="input-image">
                 </div>
               </div>
               
-              <!-- 模型4 -->
+              <!-- Model 4 -->
               <div class="mesh-container image-mesh-pair">
                 <div id="mesh-viewer-10" class="mesh-viewer"></div>
                 <p class="mesh-caption">3D reconstruction from the input image</p>
@@ -397,9 +397,9 @@
 </footer>
 
 <script>
-  // 当DOM完全加载后初始化3D模型查看器
+  // Initialize 3D model viewers when DOM is fully loaded
   document.addEventListener('DOMContentLoaded', function() {
-    // 所有查看器使用同一个模型文件
+    // All viewers use the same model files
     initMeshViewer('mesh-viewer-1', './static/meshes/Battle_Mech.ply');
     initMeshViewer('mesh-viewer-2', './static/meshes/sculpt.ply');
     initMeshViewer('mesh-viewer-3', './static/meshes/teapot.ply');
@@ -413,14 +413,14 @@
     
   });
 
-  // 初始化3D模型查看器的函数
+  // Function to initialize 3D model viewer
   function initMeshViewer(containerId, meshPath) {
-    // 获取容器尺寸
+    // Get container dimensions
     const container = document.getElementById(containerId);
     const width = container.clientWidth;
     const height = container.clientHeight;
     
-    // 创建状态显示元素
+    // Create status display element
     const statusElement = document.createElement('div');
     statusElement.style.position = 'absolute';
     statusElement.style.top = '50%';
@@ -428,13 +428,13 @@
     statusElement.style.transform = 'translate(-50%, -50%)';
     statusElement.style.color = '#333';
     statusElement.style.fontSize = '14px';
-    statusElement.textContent = '加载模型中...';
+    statusElement.textContent = 'Loading model...';
     container.style.position = 'relative';
     container.appendChild(statusElement);
     
-    // 创建场景、相机和渲染器
+    // Create scene, camera and renderer
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0xf0f0f0); // 调暗背景色
+    scene.background = new THREE.Color(0xf0f0f0); // Dimmed background color
     
     const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
     camera.position.z = 2;
@@ -443,80 +443,80 @@
     renderer.setSize(width, height);
     container.appendChild(renderer.domElement);
     
-    // 添加轨道控制器，实现拖拽、缩放功能
+    // Add orbit controls for drag, zoom functionality
     const controls = new THREE.OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
     controls.dampingFactor = 0.25;
     controls.enableZoom = true;
     
-    // 添加光照 - 调暗光照强度
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5); // 调暗环境光
+    // Add lighting - reduced light intensity
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5); // Dimmed ambient light
     scene.add(ambientLight);
     
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.7); // 调暗直射光
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.7); // Dimmed directional light
     directionalLight.position.set(1, 1, 1);
     scene.add(directionalLight);
     
-    const directionalLight2 = new THREE.DirectionalLight(0xffffff, 0.4); // 调暗辅助光源
+    const directionalLight2 = new THREE.DirectionalLight(0xffffff, 0.4); // Dimmed auxiliary light source
     directionalLight2.position.set(-1, -1, -1);
     scene.add(directionalLight2);
     
-    // 加载PLY模型
+    // Load PLY model
     const loader = new THREE.PLYLoader();
     loader.load(meshPath, function(geometry) {
-      // 居中几何体
+      // Center the geometry
       geometry.computeBoundingBox();
       const center = geometry.boundingBox.getCenter(new THREE.Vector3());
       geometry.translate(-center.x, -center.y, -center.z);
       
-      // 缩放几何体以适应视口
+      // Scale geometry to fit viewport
       const size = geometry.boundingBox.getSize(new THREE.Vector3());
       const maxDim = Math.max(size.x, size.y, size.z);
       const scale = 1.5 / maxDim;
       geometry.scale(scale, scale, scale);
       
-      // 计算顶点法线，确保光照计算正确
+      // Compute vertex normals for correct lighting
       geometry.computeVertexNormals();
       
-      // 使用调暗的材质
+      // Use dimmed material
       const material = new THREE.MeshPhongMaterial({
-        color: 0x999999, // 调暗物体颜色为深灰色
+        color: 0x999999, // Dimmed object color to dark grey
         specular: 0x111111,
-        shininess: 15, // 降低光泽度
+        shininess: 15, // Reduced glossiness
         flatShading: false
       });
       
       const mesh = new THREE.Mesh(geometry, material);
       scene.add(mesh);
       
-      // 修改初始旋转，纠正模型上下颠倒的问题
-      mesh.rotation.x = Math.PI / 2; // 从 -Math.PI/4 修改为 Math.PI/4 来翻转模型
-      mesh.rotation.z = Math.PI * 2 / 9; // 旋转模型以适应视角
-      mesh.rotation.z = Math.PI / 2; // 旋转模型以适应视角
+      // Modify initial rotation to correct upside-down models
+      mesh.rotation.x = Math.PI / 2;
+      mesh.rotation.z = Math.PI * 2 / 9;
+      mesh.rotation.z = Math.PI / 2;
 
-      // 移除状态显示
+      // Remove status display
       statusElement.style.opacity = '0';
       setTimeout(() => statusElement.remove(), 1000);
     }, 
-    // 进度回调
+    // Progress callback
     function(xhr) {
       if (xhr.lengthComputable) {
-        statusElement.textContent = `加载中: ${Math.floor(xhr.loaded / xhr.total * 100)}%`;
+        statusElement.textContent = `Loading: ${Math.floor(xhr.loaded / xhr.total * 100)}%`;
       }
     },
-    // 错误回调
+    // Error callback
     function(error) {
-      console.error('加载PLY文件失败:', error);
-      statusElement.textContent = '无法加载3D模型';
+      console.error('Failed to load PLY file:', error);
+      statusElement.textContent = 'Unable to load 3D model';
       
-      // 在加载失败时创建一个简单的立方体
+      // Create a simple cube when loading fails
       const geometry = new THREE.BoxGeometry(1, 1, 1);
-      const material = new THREE.MeshStandardMaterial({ color: 0x666666 }); // 调暗备用模型颜色
+      const material = new THREE.MeshStandardMaterial({ color: 0x666666 }); // Dimmed backup model color
       const cube = new THREE.Mesh(geometry, material);
       scene.add(cube);
     });
     
-    // 动画循环
+    // Animation loop
     function animate() {
       requestAnimationFrame(animate);
       controls.update();
@@ -525,7 +525,7 @@
     
     animate();
     
-    // 处理窗口大小调整
+    // Handle window resizing
     window.addEventListener('resize', function() {
       const newWidth = container.clientWidth;
       const newHeight = container.clientHeight;
@@ -537,14 +537,14 @@
     });
   }
 
-  // 初始化OBJ模型查看器的函数
+  // Function to initialize OBJ model viewer
   function initObjViewer(containerId, objPath, mtlPath) {
-    // 获取容器尺寸
+    // Get container dimensions
     const container = document.getElementById(containerId);
     const width = container.clientWidth;
     const height = container.clientHeight;
     
-    // 创建状态显示元素
+    // Create status display element
     const statusElement = document.createElement('div');
     statusElement.style.position = 'absolute';
     statusElement.style.top = '50%';
@@ -552,18 +552,18 @@
     statusElement.style.transform = 'translate(-50%, -50%)';
     statusElement.style.color = '#333';
     statusElement.style.fontSize = '14px';
-    statusElement.textContent = '加载模型中...';
+    statusElement.textContent = 'Loading model...';
     container.style.position = 'relative';
     container.appendChild(statusElement);
     
-    // 创建场景、相机和渲染器
+    // Create scene, camera and renderer
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0xf0f0f0); // 调暗背景色
+    scene.background = new THREE.Color(0xf0f0f0); // Dimmed background color
     
     const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
-    camera.position.z = 1.3; // 将相机位置从2改为1.2，使模型显示更近
+    camera.position.z = 1.3; // Change camera position from 2 to 1.2 for closer view
     
-    // 改进渲染器设置，禁用透明度
+    // Improved renderer settings, disable transparency
     const renderer = new THREE.WebGLRenderer({ 
       antialias: true,
       alpha: false 
@@ -571,35 +571,35 @@
     renderer.setSize(width, height);
     container.appendChild(renderer.domElement);
     
-    // 添加轨道控制器，实现拖拽、缩放功能
+    // Add orbit controls for drag, zoom functionality
     const controls = new THREE.OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
     controls.dampingFactor = 0.25;
     controls.enableZoom = true;
     
-    // 增强光照
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.7); // 增加环境光亮度
+    // Enhanced lighting
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.7); // Increased ambient light intensity
     scene.add(ambientLight);
     
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.9); // 增加直射光亮度
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.9); // Increased directional light intensity
     directionalLight.position.set(1, 1, 1);
     scene.add(directionalLight);
     
-    const directionalLight2 = new THREE.DirectionalLight(0xffffff, 0.6); // 增加辅助光亮度
+    const directionalLight2 = new THREE.DirectionalLight(0xffffff, 0.6); // Increased auxiliary light intensity
     directionalLight2.position.set(-1, -1, -1);
     scene.add(directionalLight2);
     
-    // 加载OBJ模型
+    // Load OBJ model
     const mtlLoader = new THREE.MTLLoader();
-    mtlLoader.setPath(mtlPath.substring(0, mtlPath.lastIndexOf('/') + 1)); // 设置正确的材质路径
+    mtlLoader.setPath(mtlPath.substring(0, mtlPath.lastIndexOf('/') + 1)); // Set correct material path
     mtlLoader.load(mtlPath.split('/').pop(), function(materials) {
       materials.preload();
       
       const objLoader = new THREE.OBJLoader();
       objLoader.setMaterials(materials);
-      objLoader.setPath(objPath.substring(0, objPath.lastIndexOf('/') + 1)); // 设置正确的模型路径
+      objLoader.setPath(objPath.substring(0, objPath.lastIndexOf('/') + 1)); // Set correct model path
       objLoader.load(objPath.split('/').pop(), function(object) {
-        // 遍历对象的所有材质并确保不透明
+        // Traverse all materials and ensure opacity
         object.traverse(function(child) {
           if (child instanceof THREE.Mesh) {
             if (child.material) {
@@ -607,50 +607,50 @@
                 child.material.forEach(mat => {
                   mat.transparent = false;
                   mat.opacity = 1.0;
-                  mat.side = THREE.DoubleSide; // 渲染双面
+                  mat.side = THREE.DoubleSide; // Render both sides
                 });
               } else {
                 child.material.transparent = false;
                 child.material.opacity = 1.0;
-                child.material.side = THREE.DoubleSide; // 渲染双面
+                child.material.side = THREE.DoubleSide; // Render both sides
               }
             }
           }
         });
         
-        // 居中几何体
+        // Center the geometry
         const box = new THREE.Box3().setFromObject(object);
         const center = box.getCenter(new THREE.Vector3());
         object.position.sub(center);
         
-        // 缩放几何体以适应视口
+        // Scale geometry to fit viewport
         const size = box.getSize(new THREE.Vector3());
         const maxDim = Math.max(size.x, size.y, size.z);
         const scale = 1.5 / maxDim;
         object.scale.set(scale, scale, scale);
         
-        // 调整模型旋转以便更好地显示
+        // Adjust model rotation for better display
         object.rotation.x = -Math.PI / 6;
         object.rotation.y = Math.PI / 4;
         
         scene.add(object);
         
-        // 移除状态显示
+        // Remove status display
         statusElement.style.opacity = '0';
         setTimeout(() => statusElement.remove(), 1000);
       }, 
-      // 进度回调
+      // Progress callback
       function(xhr) {
         if (xhr.lengthComputable) {
-          statusElement.textContent = `加载中: ${Math.floor(xhr.loaded / xhr.total * 100)}%`;
+          statusElement.textContent = `Loading: ${Math.floor(xhr.loaded / xhr.total * 100)}%`;
         }
       },
-      // 错误回调
+      // Error callback
       function(error) {
-        console.error('加载OBJ文件失败:', error);
-        statusElement.textContent = '无法加载3D模型';
+        console.error('Failed to load OBJ file:', error);
+        statusElement.textContent = 'Unable to load 3D model';
         
-        // 在加载失败时创建一个简单的立方体
+        // Create a simple cube when loading fails
         const geometry = new THREE.BoxGeometry(1, 1, 1);
         const material = new THREE.MeshStandardMaterial({ 
           color: 0x666666,
@@ -662,12 +662,12 @@
     },
     undefined,
     function(error) {
-      console.error('加载MTL文件失败:', error);
+      console.error('Failed to load MTL file:', error);
       
-      // MTL加载失败时，尝试不使用材质直接加载OBJ
+      // Attempt to load OBJ without material if MTL fails
       const objLoader = new THREE.OBJLoader();
       objLoader.load(objPath, function(object) {
-        // 使用默认材质
+        // Use default material
         object.traverse(function(child) {
           if (child instanceof THREE.Mesh) {
             child.material = new THREE.MeshPhongMaterial({
@@ -680,12 +680,12 @@
           }
         });
         
-        // 居中几何体
+        // Center the geometry
         const box = new THREE.Box3().setFromObject(object);
         const center = box.getCenter(new THREE.Vector3());
         object.position.sub(center);
         
-        // 缩放几何体以适应视口
+        // Scale geometry to fit viewport
         const size = box.getSize(new THREE.Vector3());
         const maxDim = Math.max(size.x, size.y, size.z);
         const scale = 1.5 / maxDim;
@@ -693,13 +693,13 @@
         
         scene.add(object);
         
-        // 移除状态显示
+        // Remove status display
         statusElement.style.opacity = '0';
         setTimeout(() => statusElement.remove(), 1000);
       });
     });
     
-    // 动画循环
+    // Animation loop
     function animate() {
       requestAnimationFrame(animate);
       controls.update();
@@ -708,7 +708,7 @@
     
     animate();
     
-    // 处理窗口大小调整
+    // Handle window resizing
     window.addEventListener('resize', function() {
       const newWidth = container.clientWidth;
       const newHeight = container.clientHeight;
