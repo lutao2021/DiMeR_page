@@ -106,12 +106,15 @@
             <span class="author-block">
               <a href="https://zhengxujosh.github.io/">Xu Zheng</a><sup>1</sup>,</span>
             <span class="author-block">
+              <a href="https://yinchuanll.github.io/">Yinchuan Li</a><sup>3</sup>,</span>
+            <span class="author-block">
               <a href="https://www.yingcong.me/">Yingcong Chen</a><sup>1,2†</sup></span>
           </div>
 
           <div class="is-size-5 publication-authors">
             <span class="author-block"><sup>1</sup>HKUST(GZ),</span>
-            <span class="author-block"><sup>2</sup>HKUST</span>
+            <span class="author-block"><sup>2</sup>HKUST,</span>
+            <span class="author-block"><sup>3</sup>Noah's Ark Lab</span>
           </div>
           
           <div class="is-size-5 publication-authors">
@@ -137,12 +140,12 @@
                 </a>
               </span>
               <span class="link-block">
-                <a href="https://arxiv.org/abs/2504.17670"
+                <a href="https://huggingface.co/LutaoJiang/DiMeR"
                    class="external-link button is-normal is-rounded is-dark">
                   <span class="icon">
-                      <i class="ai ai-arxiv"></i>
+                      <i class="fas fa-cube"></i>
                   </span>
-                  <span>arXiv</span>
+                  <span>Model</span>
                 </a>
               </span>
               <!-- Code Link. -->
@@ -157,12 +160,12 @@
               </span>
               <!-- Demo Link. -->
               <span class="link-block">
-                <a href="#"
+                <a href="https://huggingface.co/spaces/LTT/DiMeR"
                    class="external-link button is-normal is-rounded is-dark">
                   <span class="icon">
-                      <i class="fab fa-hubspot"></i>
+                      🤗
                   </span>
-                  <span>Demo</span>
+                  <span>HF Demo</span>
                   </a>
               </span>
             </div>
@@ -196,18 +199,19 @@
         <h2 class="title is-3">Abstract</h2>
         <div class="content has-text-justified">
           <p>
-            With the advent of large-scale 3D datasets, feed-forward 3D generative models, such as the Large Reconstruction Model (LRM), have gained significant attention and achieved remarkable success.
-            However, we observe that RGB images often lead to conflicting training objectives and lack the necessary clarity for geometry reconstruction.
+            We propose DiMeR, a novel geometry-texture disentangled feed-forward model with 3D supervision for sparse-view mesh reconstruction.
+            Existing methods confront two persistent obstacles: (i) textures can conceal geometric errors, i.e., visually plausible images can be rendered even with wrong geometry, producing multiple ambiguous optimization objectives in geometry-texture mixed solution space for similar objects; 
+            and (ii) prevailing mesh extraction methods are redundant, unstable, and lack 3D supervision.
           </p>
           <p>
-            In this paper, we revisit the inductive biases associated with mesh reconstruction and introduce DiMeR, a novel disentangled dual-stream feed-forward model for sparse-view mesh reconstruction.
-            The key idea is to disentangle both the input and framework into geometry and texture parts, thereby reducing the training difficulty for each part according to the Principle of Occam's Razor.
-            <strong>Given that normal maps are strictly consistent with geometry and accurately capture surface variations, we utilize normal maps as exclusive input for the geometry branch to reduce the complexity between the network's input and output.</strong>
-            Moreover, we improve the mesh extraction algorithm to introduce 3D ground truth supervision.
+            To solve these challenges, we rethink the inductive bias for mesh reconstruction. 
+            First, we disentangle the unified geometry-texture solution space, where a single input admits multiple feasible solutions, into geometry and texture spaces individually.
+            <strong>Specifically, given that normal maps are strictly consistent with geometry and accurately capture surface variations, the normal maps serve as the sole input for geometry prediction in DiMeR, while the texture is estimated from RGB images.</strong>
           </p>
           <p>
-            As for texture branch, we use RGB images as input to obtain the textured mesh.
-            Overall, DiMeR demonstrates robust capabilities across various tasks, including sparse-view reconstruction, single-image-to-3D, and text-to-3D. Numerous experiments show that DiMeR significantly outperforms previous methods, achieving over <strong>30%</strong> improvement in Chamfer Distance on the GSO and OmniObject3D dataset.
+            Second, we streamline the algorithm of mesh extraction by eliminating modules with low performance/cost ratios and redesigning regularization losses with 3D supervision.
+            Notably, DiMeR still accepts raw RGB images as input by leveraging foundation models for normal prediction.
+            Extensive experiments demonstrate that DiMeR generalises across sparse-view-, single-image-, and text-to-3D tasks, consistently outperforming baselines. On the GSO and OmniObject3D datasets, DiMeR significantly reduces Chamfer Distance by more than <strong>30%</strong>.
           </p>
         </div>
       </div>
